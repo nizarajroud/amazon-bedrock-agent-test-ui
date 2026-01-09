@@ -26,6 +26,11 @@ A generic Streamlit UI for testing generative AI agents built using Agents for A
 5. Run the following command to start the Streamlit app:
 
    ```
-   streamlit run app.py --server.port=8080 --server.address=localhost
+   streamlit run app.py --server.port=8080 --server.address=0.0.0.0
    ```
+   
+   Access the app from your host machine at: `http://172.17.112.223:8080`
+   
+   Note: The WSL IP address may change. To get the current IP, run: `hostname -I | awk '{print $1}'`
 # amazon-bedrock-agent-test-ui
+streamlit run app.py --server.port=8080 --server.address=0.0.0.0
