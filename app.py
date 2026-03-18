@@ -191,7 +191,7 @@ with st.sidebar:
                 for trace_id in trace_steps.keys():
                     with st.expander(f"Trace Step {str(step_num)}", expanded=False):
                         for trace in trace_steps[trace_id]:
-                            trace_str = json.dumps(trace, indent=2)
+                            trace_str = json.dumps(trace, indent=2, default=str)
                             st.code(trace_str, language="json", line_numbers=True, wrap_lines=True)
                     step_num += 1
         if not has_trace:
