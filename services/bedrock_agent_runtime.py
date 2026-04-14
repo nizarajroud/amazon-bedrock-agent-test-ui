@@ -5,17 +5,20 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def invoke_agent(agent_id, agent_alias_id, session_id, prompt):
+def invoke_agent(agent_id, agent_alias_id, session_id, prompt, session_state=None):
     try:
         client = boto3.session.Session().client(service_name="bedrock-agent-runtime")
         # See https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/bedrock-agent-runtime/client/invoke_agent.html
-        response = client.invoke_agent(
+        kwargs = dict(
             agentId=agent_id,
             agentAliasId=agent_alias_id,
             enableTrace=True,
             sessionId=session_id,
             inputText=prompt
         )
+        if session_state:
+            kwargs["sessionState"] = session_state
+        response = client.invoke_agent(**kwargs)
 
         output_text = ""
         citations = []

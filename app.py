@@ -27,6 +27,27 @@ agent_id = os.environ.get("BEDROCK_AGENT_ID")
 agent_alias_id = os.environ.get("BEDROCK_AGENT_ALIAS_ID", "TSTALIASID")  # TSTALIASID is the default test alias ID
 ui_title = os.environ.get("BEDROCK_AGENT_TEST_UI_TITLE", "Agents for Amazon Bedrock Test UI")
 ui_icon = os.environ.get("BEDROCK_AGENT_TEST_UI_ICON")
+kb_id = os.environ.get("BEDROCK_KB_ID")
+kb_data_source_id = os.environ.get("BEDROCK_KB_DATA_SOURCE_ID")
+
+# Build sessionState to filter KB retrieval to a specific data source
+session_state = None
+if kb_id and kb_data_source_id:
+    session_state = {
+        "knowledgeBaseConfigurations": [{
+            "knowledgeBaseId": kb_id,
+            "retrievalConfiguration": {
+                "vectorSearchConfiguration": {
+                    "filter": {
+                        "equals": {
+                            "key": "x-amz-bedrock-kb-data-source-id",
+                            "value": kb_data_source_id
+                        }
+                    }
+                }
+            }
+        }]
+    }
 
 
 def init_session_state():
@@ -67,7 +88,8 @@ if prompt := st.chat_input():
                     agent_id,
                     agent_alias_id,
                     st.session_state.session_id,
-                    prompt
+                    prompt,
+                    session_state
                 )
             output_text = response["output_text"]
 
